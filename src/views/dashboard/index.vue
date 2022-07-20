@@ -6,15 +6,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
+// 注释原来首页图表展示 import adminDashboard from './admin'
 import editorDashboard from './editor'
 
 export default {
   name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
+  components: { editorDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: ''
+      // 注释掉首页展示，没用 currentRole: 'adminDashboard'
     }
   },
   computed: {
