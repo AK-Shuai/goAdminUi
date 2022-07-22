@@ -77,7 +77,11 @@ export default {
     YsetCompanyName() {
       // 提交新增表单，关闭新增
       this.getmessage = false
-      addqingBoCompanyName(this.from)
+      addqingBoCompanyName(this.from).then(response => {
+        if (response.code === 500) {
+          this.error(response.msg)
+        }
+      })
     },
     handleCurrentChange() {
       // 翻页刷新页面
@@ -85,6 +89,9 @@ export default {
         this.tableData = response.data.list
         this.total = response.data.count
       })
+    },
+    error(msg) {
+      this.$message.error(msg)
     }
   }
 }

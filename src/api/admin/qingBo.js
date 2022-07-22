@@ -18,6 +18,24 @@ export function addqingBoPlanlist(data) {
   })
 }
 
+// 修改个人任务
+export function upqingBoPlan(data) {
+  return request({
+    url: '/api/v1/sys-business',
+    method: 'put',
+    data: data
+  })
+}
+
+// 删除个人任务
+export function deleteqingBoPlan(data) {
+  return request({
+    url: '/api/v1/sys-business',
+    method: 'delete',
+    data: data
+  })
+}
+
 // 新增公司任务列表
 export function addqingBoPlanInsertlist(data) {
   return request({
