@@ -17,6 +17,13 @@
           prop="CompanyName"
           label="公司名"
         />
+        <el-table-column
+          label="整改"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" @click="deleteCompanyName(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="paginationClass">
         <el-pagination
@@ -41,7 +48,7 @@
 </template>
 
 <script>
-import { qingBoCompanylist, addqingBoCompanyName } from '@/api/admin/qingBo'
+import { qingBoCompanylist, addqingBoCompanyName, deleteCompanyName } from '@/api/admin/qingBo'
 
 export default {
   name: 'CompanyList',
@@ -102,6 +109,30 @@ export default {
       qingBoCompanylist(this.queryParams).then(response => {
         this.tableData = response.data.list
         this.total = response.data.count
+      })
+    },
+    deleteCompanyName(row) {
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteCompanyName({ id: row.id }).then(response => {
+          if (response.code === 200) {
+            this.$message({ type: 'success', message: '删除成功!' })
+            this.getList()
+            return
+          }
+          if (response.code === 500) {
+            this.error(response.msg)
+            return
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     error(msg) {
