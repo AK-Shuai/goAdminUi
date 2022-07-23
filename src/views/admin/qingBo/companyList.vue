@@ -96,6 +96,7 @@ export default {
       addqingBoCompanyName(this.from).then(response => {
         if (response.code === 200) {
           this.success(response.msg)
+          this.getList()
           return
         }
         if (response.code === 500) {
