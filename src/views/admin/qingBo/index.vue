@@ -88,6 +88,18 @@
           prop="Telephone"
           label="联系人电话"
         />
+        <el-table-column
+          prop="Remark"
+          label="备注"
+        />
+        <el-table-column
+          label="整改"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" @click="upFromList(scope.row)">修改</el-button>
+            <el-button type="text" @click="deleteFromList(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="paginationClass">
         <el-pagination
@@ -134,6 +146,9 @@
         <el-form-item label="联系人电话" prop="Telephone">
           <el-input v-model="from.Telephone" placeholder="联系人电话" />
         </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="from.Remark" placeholder="备注" />
+        </el-form-item>
         <el-button type="primary" size="mini" style="float:right" @click="YsetPeopleList(from)">确认</el-button>
       </el-form>
     </el-dialog>
@@ -178,14 +193,104 @@
         <el-form-item label="联系人电话">
           <el-input v-model="fromCompany.Telephone" placeholder="联系人电话" />
         </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="fromCompany.Remark" placeholder="备注" />
+        </el-form-item>
         <el-button type="primary" size="mini" style="float:right" @click="YsetCompanyList(fromCompany)">确认</el-button>
+      </el-form>
+    </el-dialog>
+    <el-dialog :visible.sync="upPeopleMessage">
+      <el-form ref="from" :model="upFromPeople" :rules="rules" label-width="100px">
+        <el-form-item label="日期">
+          <el-input v-model="upFromPeople.Date" placeholder="日期" />
+        </el-form-item>
+        <el-form-item label="服务时间">
+          <el-time-select
+            v-model="upFromPeople.ServiceTime"
+            :picker-options="{ start: '00:00', step: '00:15', end: '23:30' }"
+            placeholder="选择时间"
+          />
+        </el-form-item>
+        <el-form-item label="服务内容">
+          <el-select v-model="upFromPeople.ServiceContent" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务性质">
+          <el-select v-model="upFromPeople.ServiceQuality" placeholder="请选择">
+            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="金额">
+          <el-input v-model="upFromPeople.Money" placeholder="金额" />
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="upFromPeople.Address" placeholder="地址" />
+        </el-form-item>
+        <el-form-item label="联系人姓名">
+          <el-input v-model="upFromPeople.Name" placeholder="联系人姓名" />
+        </el-form-item>
+        <el-form-item label="联系人电话" prop="Telephone">
+          <el-input v-model="upFromPeople.Telephone" placeholder="联系人电话" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="upFromPeople.Remark" placeholder="备注" />
+        </el-form-item>
+        <el-button type="primary" size="mini" style="float:right" @click="upPeopleList(upFromPeople)">确认</el-button>
+      </el-form>
+    </el-dialog>
+    <el-dialog :visible.sync="upCompanyMessage">
+      <el-form ref="from" :model="upFromCompany" label-width="100px">
+        <el-form-item label="日期">
+          <el-input v-model="upFromCompany.Date" placeholder="日期" />
+        </el-form-item>
+        <el-form-item label="公司名">
+          <el-select v-model="upFromCompany.CompanyNameType" placeholder="请选择公司名" clearable filterable>
+            <el-option v-for="(item,index) in input" :key="index" :label="item.CompanyName" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务时间">
+          <el-time-select
+            v-model="upFromCompany.ServiceTime"
+            clearable
+            filterable
+            :picker-options="{ start: '00:00', step: '00:15', end: '23:30' }"
+            placeholder="选择时间"
+          />
+        </el-form-item>
+        <el-form-item label="服务内容">
+          <el-select v-model="upFromCompany.ServiceContent" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服务性质">
+          <el-select v-model="upFromCompany.ServiceQuality" placeholder="请选择">
+            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="金额">
+          <el-input v-model="upFromCompany.Money" placeholder="金额" />
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="upFromCompany.Address" placeholder="地址" />
+        </el-form-item>
+        <el-form-item label="联系人姓名">
+          <el-input v-model="upFromCompany.Name" placeholder="联系人姓名" />
+        </el-form-item>
+        <el-form-item label="联系人电话">
+          <el-input v-model="upFromCompany.Telephone" placeholder="联系人电话" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="upFromCompany.Remark" placeholder="备注" />
+        </el-form-item>
+        <el-button type="primary" size="mini" style="float:right" @click="upCompanyList(upFromCompany)">确认</el-button>
       </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { qingBoPlanlist, addqingBoPlanlist, qingBoCompanylist, addqingBoPlanInsertlist } from '@/api/admin/qingBo'
+import { qingBoPlanlist, addqingBoPlanlist, qingBoCompanylist, addqingBoPlanInsertlist, upqingBoPlan, deleteqingBoPlan } from '@/api/admin/qingBo'
 
 export default {
   name: 'QingBoList',
@@ -221,8 +326,12 @@ export default {
       total: 0,
       from: {},
       fromCompany: {},
+      upFromPeople: {},
+      upFromCompany: {},
       getPeopleMessage: false,
       getCompanyMessage: false,
+      upCompanyMessage: false,
+      upPeopleMessage: false,
       quality_name_list: [
         {
           value: 1,
@@ -280,12 +389,28 @@ export default {
     getList() {
       // 获取全部公司列表
       qingBoCompanylist(this.queryParamsAll).then(response => {
-        this.input = response.data.list
+        if (response.code === 200) {
+          this.input = response.data.list
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
       })
       // 获取任务列表
       qingBoPlanlist(this.addDateRange(this.queryParams)).then(response => {
-        this.tableData = response.data.list
-        this.total = response.data.count
+        if (response.code === 200) {
+          this.tableData = response.data.list
+          this.total = response.data.count
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
       })
     },
     isEmpty() {
@@ -306,30 +431,124 @@ export default {
     YsetPeopleList() {
       // 提交个人表单
       this.from.Money = parseInt(this.from.Money)
-      this.from.CompanyType = 1
+      this.from.CompanyType = 2
       this.getPeopleMessage = false
-      addqingBoPlanlist(this.from)
+      addqingBoPlanlist(this.from).then(response => {
+        if (response.code === 200) {
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
       this.from = {}
+      this.getList()
     },
     YsetCompanyList() {
       // 提交公司表单
       this.fromCompany.Money = parseInt(this.from.Money)
-      this.fromCompany.CompanyType = 2
+      this.fromCompany.CompanyType = 1
       this.getCompanyMessage = false
-      addqingBoPlanInsertlist(this.fromCompany)
+      addqingBoPlanInsertlist(this.fromCompany).then(response => {
+        if (response.code === 500) {
+          this.error(response.msg)
+        }
+      })
       this.fromCompany = {}
+      this.getList()
     },
     getCompanyNameList() {
       // 获取全部公司type
       qingBoCompanylist({}).then(response => {
-        this.input = response.data.list
+        if (response.code === 200) {
+          this.input = response.data.list
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
       })
     },
     handleCurrentChange() {
       // 翻页操作
       qingBoPlanlist(this.addDateRange(this.queryParams)).then(response => {
-        this.tableData = response.data.list
-        this.total = response.data.count
+        if (response.code === 200) {
+          this.tableData = response.data.list
+          this.total = response.data.count
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
+    },
+    upFromList(row) {
+      // 修改弹框
+      if (row.CompanyType === 2) {
+        this.upPeopleMessage = true
+        this.upFromPeople = row
+      } else {
+        this.upCompanyMessage = true
+        this.upFromCompany = row
+      }
+    },
+    deleteFromList(row) {
+      // 删除记录
+      deleteqingBoPlan({ id: row.id }).then(response => {
+        if (response.code === 200) {
+          this.getList()
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
+    },
+    upPeopleList() {
+      upqingBoPlan(this.upFromPeople).then(response => {
+        if (response.code === 200) {
+          this.upPeopleMessage = false
+          this.getList()
+          this.upFromPeople = {}
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
+    },
+    upCompanyList() {
+      upqingBoPlan(this.upFromCompany).then(response => {
+        if (response.code === 200) {
+          this.upCompanyMessage = false
+          this.getList()
+          this.upFromCompany = {}
+          this.success(response.msg)
+          return
+        }
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
+    },
+    error(msg) {
+      this.$message.error(msg)
+    },
+    success(msg) {
+      this.$message({
+        message: msg,
+        type: 'success'
       })
     }
   }
