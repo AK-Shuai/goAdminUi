@@ -500,16 +500,27 @@ export default {
     },
     deleteFromList(row) {
       // 删除记录
-      deleteqingBoPlan({ id: row.id }).then(response => {
-        if (response.code === 200) {
-          this.getList()
-          this.success(response.msg)
-          return
-        }
-        if (response.code === 500) {
-          this.error(response.msg)
-          return
-        }
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteqingBoPlan({ id: row.id }).then(response => {
+          if (response.code === 200) {
+            this.$message({ type: 'success', message: '删除成功!' })
+            this.getList()
+            return
+          }
+          if (response.code === 500) {
+            this.error(response.msg)
+            return
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     upPeopleList() {
