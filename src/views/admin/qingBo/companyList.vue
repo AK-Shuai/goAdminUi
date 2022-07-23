@@ -66,8 +66,17 @@ export default {
     getList() {
       // 获取任务列表
       qingBoCompanylist(this.queryParams).then(response => {
-        this.tableData = response.data.list
-        this.total = response.data.count
+        if (response.code === 200) {
+          this.tableData = response.data.list
+          this.total = response.data.count
+          this.success(response.msg)
+          return
+        }
+
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
       })
     },
     setCompanyName() {
@@ -78,8 +87,13 @@ export default {
       // 提交新增表单，关闭新增
       this.getmessage = false
       addqingBoCompanyName(this.from).then(response => {
+        if (response.code === 200) {
+          this.success(response.msg)
+          return
+        }
         if (response.code === 500) {
           this.error(response.msg)
+          return
         }
       })
     },
@@ -92,6 +106,12 @@ export default {
     },
     error(msg) {
       this.$message.error(msg)
+    },
+    success(msg) {
+      this.$message({
+        message: msg,
+        type: 'success'
+      })
     }
   }
 }
