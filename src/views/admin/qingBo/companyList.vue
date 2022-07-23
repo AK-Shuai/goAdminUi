@@ -21,7 +21,7 @@
           label="整改"
         >
           <template slot-scope="scope">
-            <el-button type="text" @click="deleteCompanyName(scope.row)">删除</el-button>
+            <el-button type="text" @click="deleteCompanyNameList(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -111,7 +111,7 @@ export default {
         this.total = response.data.count
       })
     },
-    deleteCompanyName(row) {
+    deleteCompanyNameList(row) {
       this.$confirm('是否删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

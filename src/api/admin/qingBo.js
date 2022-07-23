@@ -66,7 +66,7 @@ export function addqingBoCompanyName(data) {
 // 删除公司名
 export function deleteCompanyName(data) {
   return request({
-    url: '/api/v1/sys-business',
+    url: '/api/v1/sys-company-list',
     method: 'delete',
     data: data
   })
