@@ -71,3 +71,12 @@ export function deleteCompanyName(data) {
     data: data
   })
 }
+
+// 上传excel
+export function uploadExcel(data) {
+  return request({
+    url: '/api/v1/sys-business/upload-excel',
+    method: 'post',
+    data: data
+  })
+}
