@@ -80,3 +80,30 @@ export function uploadExcel(data) {
     data: data
   })
 }
+
+// 查询服务内容
+export function qingBoServiceContent(query) {
+  return request({
+    url: '/api/v1/sys-service-content',
+    method: 'get',
+    params: query
+  })
+}
+
+// 新增服务内容
+export function addqingBoServiceContent(data) {
+  return request({
+    url: '/api/v1/sys-service-content',
+    method: 'post',
+    data: data
+  })
+}
+
+// 删除服务内容
+export function deleteServiceContent(data) {
+  return request({
+    url: '/api/v1/sys-service-content',
+    method: 'delete',
+    data: data
+  })
+}

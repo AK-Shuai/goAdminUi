@@ -65,14 +65,7 @@
           label="服务性质"
         >
           <template slot-scope="scope">
-            <p v-if="scope.row.ServiceQuality==0">
-              未配置
-            </p>
-            <p v-else-if="scope.row.ServiceQuality==1">
-              首次
-            </p>
-            <p v-else-if="scope.row.ServiceQuality==2">
-              售后
+            <p>{{ ServiceContentListTmp[scope.row.ServiceQuality] }}
             </p>
           </template>
         </el-table-column>
@@ -131,7 +124,7 @@
         </el-form-item>
         <el-form-item label="服务性质">
           <el-select v-model="from.ServiceQuality" placeholder="请选择">
-            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="(item,index) in ServiceContentList" :key="index" :label="item.ServiceContent" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="金额">
@@ -178,7 +171,7 @@
         </el-form-item>
         <el-form-item label="服务性质">
           <el-select v-model="fromCompany.ServiceQuality" placeholder="请选择">
-            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="(item,index) in ServiceContentList" :key="index" :label="item.ServiceContent" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="金额">
@@ -218,7 +211,7 @@
         </el-form-item>
         <el-form-item label="服务性质">
           <el-select v-model="upFromPeople.ServiceQuality" placeholder="请选择">
-            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="(item,index) in ServiceContentList" :key="index" :label="item.ServiceContent" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="金额">
@@ -265,7 +258,7 @@
         </el-form-item>
         <el-form-item label="服务性质">
           <el-select v-model="upFromCompany.ServiceQuality" placeholder="请选择">
-            <el-option v-for="item in service_content" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="(item,index) in ServiceContentList" :key="index" :label="item.ServiceContent" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="金额">
@@ -290,7 +283,7 @@
 </template>
 
 <script>
-import { qingBoPlanlist, addqingBoPlanlist, qingBoCompanylist, addqingBoPlanInsertlist, upqingBoPlan, deleteqingBoPlan } from '@/api/admin/qingBo'
+import { qingBoPlanlist, addqingBoPlanlist, qingBoCompanylist, addqingBoPlanInsertlist, upqingBoPlan, deleteqingBoPlan, qingBoServiceContent } from '@/api/admin/qingBo'
 
 export default {
   name: 'QingBoList',
@@ -341,6 +334,8 @@ export default {
           label: '个人'
         }
       ],
+      ServiceContentListTmp: [],
+      ServiceContentList: [],
       options: [
         {
           value: 1,
@@ -387,11 +382,26 @@ export default {
   },
   methods: {
     getList() {
+      // 获取全部服务内容
+      qingBoServiceContent(this.queryParamsAll).then(response => {
+        if (response.code === 200) {
+          this.ServiceContentList = response.data.list
+          for (var ServiceContentListTmp1 in this.ServiceContentList) {
+            this.ServiceContentListTmp[this.ServiceContentList[ServiceContentListTmp1].id] = this.ServiceContentList[ServiceContentListTmp1].ServiceContent
+          }
+          console.log(this.ServiceContentListTmp)
+          return
+        }
+
+        if (response.code === 500) {
+          this.error(response.msg)
+          return
+        }
+      })
       // 获取全部公司列表
       qingBoCompanylist(this.queryParamsAll).then(response => {
         if (response.code === 200) {
           this.input = response.data.list
-          this.success(response.msg)
           return
         }
         if (response.code === 500) {
