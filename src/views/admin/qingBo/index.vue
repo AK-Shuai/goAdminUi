@@ -53,10 +53,25 @@
               未配置
             </p>
             <p v-else-if="scope.row.ServiceContent==1">
-              除虫
+              蟑螂
             </p>
             <p v-else-if="scope.row.ServiceContent==2">
-              除鼠
+              老鼠
+            </p>
+            <p v-if="scope.row.ServiceContent==3">
+              臭虫
+            </p>
+            <p v-else-if="scope.row.ServiceContent==4">
+              蚊蝇
+            </p>
+            <p v-else-if="scope.row.ServiceContent==5">
+              跳蚤
+            </p>
+            <p v-if="scope.row.ServiceContent==6">
+              蟑螂 老鼠
+            </p>
+            <p v-else-if="scope.row.ServiceContent==7">
+              四害
             </p>
           </template>
         </el-table-column>
@@ -339,10 +354,29 @@ export default {
       options: [
         {
           value: 1,
-          label: '除虫'
+          label: '蟑螂'
         }, {
           value: 2,
-          label: '除鼠'
+          label: '老鼠'
+        },
+        {
+          value: 3,
+          label: '臭虫'
+        }, {
+          value: 4,
+          label: '蚊蝇'
+        },
+        {
+          value: 5,
+          label: '跳蚤'
+        },
+        {
+          value: 6,
+          label: '蟑螂 老鼠'
+        },
+        {
+          value: 7,
+          label: '四害'
         }
       ],
       service_content: [
